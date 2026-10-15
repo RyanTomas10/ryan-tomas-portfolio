@@ -1,4 +1,9 @@
 import { Project, ProcessStep } from '../types';
+import heroSelfieImg from '../assets/images/Cozy London Hoodie Selfie.png';
+import abelamImg from '../assets/images/Abelam realty.png';
+import chrisConcreteImg from '../assets/images/Chrisconcrete.png';
+import coastalVaImg from '../assets/images/Coastal Virginia.png';
+import homechefImg from '../assets/images/2.png';
 
 export const PERSONAL_INFO = {
   name: 'Ryan Tomas',
@@ -13,8 +18,8 @@ export const PERSONAL_INFO = {
   headlineTop: 'HIGH-CONVERTING WEBSITES, FUNNELS AND AUTOMATIONS',
   headlineMain: 'GOHIGHLEVEL',
   headlineSub: 'SPECIALIST',
-  heroImage: '/src/assets/images/Cozy London Hoodie Selfie.png',
-  heroImageFallback: '/src/assets/images/Cozy London Hoodie Selfie.png',
+  heroImage: heroSelfieImg,
+  heroImageFallback: '/images/Cozy London Hoodie Selfie.png',
   summary:
     'GoHighLevel (GHL) Specialist with over 2 years of hands-on experience architecting end-to-end sales funnels, high-performing websites, and advanced multi-channel automations for businesses across the US and Canada. Combines a solid technical foundation (BS in Computer Science) with deep marketing infrastructure expertise to streamline operations, eliminate manual friction, and dramatically increase conversion rates for founders and CEOs.',
 };
@@ -91,7 +96,7 @@ export const FEATURED_PROJECTS: Project[] = [
       { label: 'Onboarding Speed', value: 'Instant' },
       { label: 'Lead Capture', value: '100% Automated' },
     ],
-    image: '/src/assets/images/Abelam realty.png',
+    image: abelamImg,
     technologies: ['GoHighLevel', 'GHL Funnels', 'Calendar API', 'Custom CSS', 'Email Workflows'],
   },
   {
@@ -116,7 +121,7 @@ export const FEATURED_PROJECTS: Project[] = [
       { label: 'Estimate Requests', value: '+3.4x' },
       { label: 'Lead Retention', value: '98%' },
     ],
-    image: '/src/assets/images/Chrisconcrete.png',
+    image: chrisConcreteImg,
     technologies: ['GoHighLevel', 'SMS Triggers', 'Form Builder', 'Pipeline Management', 'DNS Routing'],
   },
   {
@@ -141,7 +146,7 @@ export const FEATURED_PROJECTS: Project[] = [
       { label: 'Mobile Conversion', value: '4.8%' },
       { label: 'Show-Up Rate', value: '91%' },
     ],
-    image: '/src/assets/images/Coastal Virginia.png',
+    image: coastalVaImg,
     technologies: ['GoHighLevel', 'Landing Page Design', 'Calendar Booking', 'SMS Reminders', 'Subdomain DNS'],
   },
   {
@@ -167,7 +172,7 @@ export const FEATURED_PROJECTS: Project[] = [
       { label: 'Show-Up Rate', value: '+58%' },
       { label: 'Data Sync Error', value: '0%' },
     ],
-    image: '/src/assets/images/2.png',
+    image: homechefImg,
     technologies: ['GoHighLevel', 'Typeform', 'Calendly', 'Zapier Webhooks', 'Automated Email/SMS'],
   },
 ];
