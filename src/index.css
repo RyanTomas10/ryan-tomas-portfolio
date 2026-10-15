@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+}
+
+/* Custom glow and backdrop effects */
+.radial-glow {
+  background: radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.02) 50%, transparent 80%);
+}
+
+.hero-arc {
+  background: radial-gradient(circle at 75% 35%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+}
+
+/* Light / dark mode transition smoothness */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Print styles for CV download/print */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
