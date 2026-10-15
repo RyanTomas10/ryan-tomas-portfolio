@@ -11,6 +11,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { submitInquiryToSupabase } from '../lib/supabase';
 
 interface ContactSectionProps {
   darkMode: boolean;
@@ -24,7 +25,9 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ darkMode }) => {
     projectScope: 'GoHighLevel Funnel & CRM Build',
     message: '',
   });
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(PERSONAL_INFO.email);
@@ -32,9 +35,54 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ darkMode }) => {
     setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      let saved = false;
+
+      // 1. Submit directly to Supabase database
+      try {
+        await submitInquiryToSupabase(formData);
+        saved = true;
+      } catch (sbError) {
+        console.warn('Direct Supabase submission notice:', sbError);
+      }
+
+      // 2. Also send to /api/inquiries if backend is running (or as fallback)
+      if (!saved) {
+        const response = await fetch('/api/inquiries', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => null);
+          throw new Error(errorData?.error || 'Failed to submit inquiry to database.');
+        }
+      } else {
+        // Silently mirror to local backend if online
+        fetch('/api/inquiries', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        }).catch(() => {});
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      console.error('Inquiry submission error:', err);
+      setErrorMessage(
+        err.message || 'Something went wrong while connecting to the database. Please try again or reach out on WhatsApp.'
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -218,12 +266,19 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ darkMode }) => {
                       />
                     </div>
 
+                    {errorMessage && (
+                      <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+                        {errorMessage}
+                      </div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full py-3 rounded-xl font-bold text-xs tracking-wider uppercase bg-amber-500 hover:bg-amber-400 text-slate-950 transition-colors flex items-center justify-center gap-2 shadow-md active:scale-98"
+                      disabled={submitting}
+                      className="w-full py-3 rounded-xl font-bold text-xs tracking-wider uppercase bg-amber-500 hover:bg-amber-400 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 transition-colors flex items-center justify-center gap-2 shadow-md active:scale-98 cursor-pointer"
                     >
                       <Send className="w-3.5 h-3.5" />
-                      <span>Send Project Inquiry</span>
+                      <span>{submitting ? 'Submitting to Database...' : 'Send Project Inquiry'}</span>
                     </button>
                   </form>
                 )}
